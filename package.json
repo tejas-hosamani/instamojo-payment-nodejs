@@ -6,12 +6,19 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/CodingCreate101/instamojo-payment-nodejs.git"
+  },
+  "bugs": {
+    "url": "https://github.com/CodingCreate101/instamojo-payment-nodejs/issues"
+  },
   "keywords": [
     "Instamojo",
     "payment",
     "nodejs",
     "gateway"
   ],
-  "author": "Tejas H",
-  "license": "ISC"
+  "author": "Tejas H <tejas.soe@gmail.com>",
+  "license": "MIT"
 }
