@@ -2,7 +2,7 @@
   "name": "instamojo-payment-nodejs",
   "version": "1.0.0",
   "description": "Promise based Instamojo payment gateway integration for NodeJS",
-  "main": "instamojo.js",
+  "main": "main.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -19,6 +19,13 @@
     "nodejs",
     "gateway"
   ],
-  "author": "Tejas H <tejas.soe@gmail.com>",
-  "license": "MIT"
+  "author": {
+    "name": "Tejas H",
+    "email": "tejas.soe@gmail.com",
+    "url": "https://github.com/CodingCreate101"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "axios": "^0.19.2"
+  }
 }
