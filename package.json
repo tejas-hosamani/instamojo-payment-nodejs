@@ -8,7 +8,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/CodingCreate101/instamojo-payment-nodejs.git"
+    "url": "git://github.com/CodingCreate101/instamojo-payment-nodejs.git"
   },
   "bugs": {
     "url": "https://github.com/CodingCreate101/instamojo-payment-nodejs/issues"
@@ -23,9 +23,6 @@
     "name": "Tejas H",
     "email": "tejas.soe@gmail.com",
     "url": "https://github.com/CodingCreate101"
-  },
-  "publishConfig": {
-    "registry": "https://npm.pkg.github.com/"
   },
   "license": "MIT",
   "dependencies": {
