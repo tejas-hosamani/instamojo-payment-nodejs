@@ -1,6 +1,6 @@
 {
   "name": "instamojo-payment-nodejs",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "Promise based Instamojo payment gateway integration for NodeJS",
   "main": "main.js",
   "scripts": {
