@@ -12,10 +12,11 @@ npm i instamojo-payment-nodejs // OR yarn add instamojo-payment-nodejs
 
 ## APIs Available
 
-1. [Setup keys](#Setup-keys)
+1. [Setup keys](#setup-keys)
 1. [Create a new payment request](#create-new-payment-request)
 1. [Get single payment request details](#Get-single-payment-request-details)
 1. [Get single payment details](#Get-single-payment-details)
+1. [Get all payment requests](#Get-all-payment-requests)
 
 ### **Setup keys**
 
@@ -225,6 +226,49 @@ const paymentDetails = await Instamojo.getOnePayedPaymentDetails(
 
 <br />
 
+### **Get all payment requests**
+
+```js
+const response = await Instamojo.getAllPaymentRequests();
+```
+
+<details><summary>Response from <b>getAllPaymentRequests</b></summary>
+
+```json
+{
+  "success": true,
+  // List of payment requests
+  "payment_requests": [
+    {
+      "id": PAYMENT_REQUEST_ID,
+      "phone": null,
+      "email": "",
+      "buyer_name": "",
+      "amount": "20.00",
+      "purpose": "Product name",
+      "expires_at": null,
+      "status": "Pending",
+      "send_sms": false,
+      "send_email": false,
+      "sms_status": null,
+      "email_status": null,
+      "shorturl": null,
+      "longurl": "https://test.instamojo.com/@USER/PAYMENT_REQUEST_ID",
+      "redirect_url": "",
+      "webhook": "",
+      "allow_repeated_payments": false,
+      "customer_id": null,
+      "created_at": "2020-08-16T15:46:42.970983Z",
+      "modified_at": "2020-08-16T15:46:42.971001Z"
+    }
+  ]
+}
+```
+
+</details>
+
+<br />
+
 ---
 
 ## Road map:
@@ -236,7 +280,7 @@ const paymentDetails = await Instamojo.getOnePayedPaymentDetails(
    1. 📈 Write easy-to-follow docs for package consumers
    1. ✅ Get Single payment request details
    1. ✅ Get Single payment details
-   1. Get all payment links
+   1. ✅ Get all payment requests
    1. Get all payments
    1. Initiate refund
    1. Get refund details

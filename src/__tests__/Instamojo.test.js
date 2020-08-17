@@ -2,8 +2,8 @@ const maxios = require("axios").default;
 
 const Instamojo = require("../Instamojo");
 
-const paymentId = "MOJO0816705N15845280";
-const paymentRequestId = "0cb066f9d3764c2fab6da469d8f613ss";
+const PAYMENT_ID = "MOJO0816705N15845280";
+const PAYMENT_REQUEST_ID = "0cb066f9d3764c2fab6da469d8f613ss";
 const buyerPhone = "+919900000000";
 const promiseRejectResponse = {
   response: { data: { success: false, message: "Error message" } },
@@ -84,7 +84,7 @@ describe("Create payment request", () => {
       data: {
         success: true,
         payment_request: {
-          id: paymentRequestId,
+          id: PAYMENT_REQUEST_ID,
           phone: null,
           email: "",
           buyer_name: "",
@@ -97,7 +97,7 @@ describe("Create payment request", () => {
           sms_status: null,
           email_status: null,
           shorturl: null,
-          longurl: `https://test.instamojo.com/@user/${paymentRequestId}`,
+          longurl: `https://test.instamojo.com/@user/${PAYMENT_REQUEST_ID}`,
           redirect_url: "",
           webhook: "",
           allow_repeated_payments: false,
@@ -147,7 +147,7 @@ describe("should get payment details", () => {
     const statusResponseObject = {
       success: true,
       payment_request: {
-        id: paymentRequestId,
+        id: PAYMENT_REQUEST_ID,
         phone: null,
         email: "",
         buyer_name: "",
@@ -160,12 +160,12 @@ describe("should get payment details", () => {
         sms_status: null,
         email_status: null,
         shorturl: null,
-        longurl: `https://test.instamojo.com/@USER/${paymentRequestId}`,
+        longurl: `https://test.instamojo.com/@USER/${PAYMENT_REQUEST_ID}`,
         redirect_url: "",
         webhook: "",
         payments: [
           {
-            payment_id: paymentId,
+            payment_id: PAYMENT_ID,
             status: "Credit",
             currency: "INR",
             amount: "20.00",
@@ -183,7 +183,7 @@ describe("should get payment details", () => {
             variants: [],
             custom_fields: {},
             affiliate_commission: "0",
-            payment_request: `https://test.instamojo.com/api/1.1/payment-requests/${paymentRequestId}/`,
+            payment_request: `https://test.instamojo.com/api/1.1/payment-requests/${PAYMENT_REQUEST_ID}/`,
             instrument_type: "NETBANKING",
             billing_instrument: "Domestic Netbanking Regular",
             tax_invoice_id: "",
@@ -205,16 +205,18 @@ describe("should get payment details", () => {
       Promise.reject(promiseRejectResponse)
     );
 
-    const response = await Instamojo.getPaymentRequestStatus(paymentRequestId);
+    const response = await Instamojo.getPaymentRequestStatus(
+      PAYMENT_REQUEST_ID
+    );
     const rejectedResponse = await Instamojo.getPaymentRequestStatus(
-      paymentRequestId
+      PAYMENT_REQUEST_ID
     );
 
     expect(response).toStrictEqual(statusResponseObject);
     expect(rejectedResponse).toStrictEqual(promiseRejectResponse.response);
     expect(maxios.get).toHaveBeenCalledTimes(2);
     expect(maxios.get).toHaveBeenCalledWith(
-      `/payment-requests/${paymentRequestId}`
+      `/payment-requests/${PAYMENT_REQUEST_ID}`
     );
   });
 
@@ -222,7 +224,7 @@ describe("should get payment details", () => {
     const onePayedExpectedResponse = {
       success: true,
       payment_request: {
-        id: paymentRequestId,
+        id: PAYMENT_REQUEST_ID,
         phone: null,
         email: "",
         buyer_name: "",
@@ -235,11 +237,11 @@ describe("should get payment details", () => {
         sms_status: null,
         email_status: null,
         shorturl: null,
-        longurl: `https://test.instamojo.com/@USER/${paymentRequestId}`,
+        longurl: `https://test.instamojo.com/@USER/${PAYMENT_REQUEST_ID}`,
         redirect_url: "",
         webhook: "",
         payment: {
-          payment_id: paymentId,
+          payment_id: PAYMENT_ID,
           status: "Credit",
           currency: "INR",
           amount: "20.00",
@@ -257,7 +259,7 @@ describe("should get payment details", () => {
           variants: [],
           custom_fields: {},
           affiliate_commission: "0",
-          payment_request: `https://test.instamojo.com/api/1.1/payment-requests/${paymentRequestId}/`,
+          payment_request: `https://test.instamojo.com/api/1.1/payment-requests/${PAYMENT_REQUEST_ID}/`,
           instrument_type: "NETBANKING",
           billing_instrument: "Domestic Netbanking Regular",
           tax_invoice_id: "",
@@ -280,18 +282,63 @@ describe("should get payment details", () => {
     );
 
     const response = await Instamojo.getOnePayedPaymentDetails(
-      paymentRequestId,
-      paymentId
+      PAYMENT_REQUEST_ID,
+      PAYMENT_ID
     );
     const rejectedResponse = await Instamojo.getOnePayedPaymentDetails(
-      paymentRequestId
+      PAYMENT_REQUEST_ID
     );
 
     expect(response).toStrictEqual(onePayedExpectedResponse);
     expect(rejectedResponse).toStrictEqual(promiseRejectResponse.response);
     expect(maxios.get).toHaveBeenCalledTimes(2);
     expect(maxios.get).toHaveBeenCalledWith(
-      `/payment-requests/${paymentRequestId}/${paymentId}`
+      `/payment-requests/${PAYMENT_REQUEST_ID}/${PAYMENT_ID}`
     );
+  });
+
+  test("Should get ALL payment request details", async () => {
+    const allPaymentsExpectedResponse = {
+      success: true,
+      payment_requests: [
+        {
+          id: PAYMENT_REQUEST_ID,
+          phone: null,
+          email: "",
+          buyer_name: "",
+          amount: "20.00",
+          purpose: "Product name",
+          expires_at: null,
+          status: "Pending",
+          send_sms: false,
+          send_email: false,
+          sms_status: null,
+          email_status: null,
+          shorturl: null,
+          longurl: `https://test.instamojo.com/@USER/${PAYMENT_REQUEST_ID}`,
+          redirect_url: "",
+          webhook: "",
+          allow_repeated_payments: false,
+          customer_id: null,
+          created_at: "2020-08-16T15:46:42.970983Z",
+          modified_at: "2020-08-16T15:46:42.971001Z",
+        },
+      ],
+    };
+    maxios.get.mockImplementationOnce(() => {
+      return Promise.resolve({ data: allPaymentsExpectedResponse });
+    });
+
+    maxios.get.mockImplementationOnce(() =>
+      Promise.reject(promiseRejectResponse)
+    );
+
+    const response = await Instamojo.getAllPaymentRequests();
+    const rejectedResponse = await Instamojo.getAllPaymentRequests();
+
+    expect(response).toStrictEqual(allPaymentsExpectedResponse);
+    expect(rejectedResponse).toStrictEqual(promiseRejectResponse.response);
+    expect(maxios.get).toHaveBeenCalledTimes(2);
+    expect(maxios.get).toHaveBeenCalledWith("/payment-requests");
   });
 });

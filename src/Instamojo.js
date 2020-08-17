@@ -86,6 +86,15 @@ const getOnePayedPaymentDetails = async (paymentRequestId, paymentId) => {
   }
 };
 
+const getAllPaymentRequests = async () => {
+  try {
+    const response = await axios.get(ENDPOINT.paymentStatus);
+    return response.data;
+  } catch (error) {
+    return error.response;
+  }
+};
+
 module.exports = {
   isSandboxMode,
   setKeys,
@@ -93,4 +102,5 @@ module.exports = {
   createNewPaymentRequest,
   getPaymentRequestStatus,
   getOnePayedPaymentDetails,
+  getAllPaymentRequests,
 };
