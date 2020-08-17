@@ -95,6 +95,15 @@ const getAllPaymentRequests = async () => {
   }
 };
 
+const getAllPaymentLinksCreatedOnInstamojo = async () => {
+  try {
+    const response = await axios.get(ENDPOINT.requestLinks);
+    return response.data;
+  } catch (error) {
+    return error.response;
+  }
+};
+
 module.exports = {
   isSandboxMode,
   setKeys,
@@ -103,4 +112,5 @@ module.exports = {
   getPaymentRequestStatus,
   getOnePayedPaymentDetails,
   getAllPaymentRequests,
+  getAllPaymentLinksCreatedOnInstamojo,
 };

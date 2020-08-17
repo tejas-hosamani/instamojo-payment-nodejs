@@ -341,4 +341,23 @@ describe("should get payment details", () => {
     expect(maxios.get).toHaveBeenCalledTimes(2);
     expect(maxios.get).toHaveBeenCalledWith("/payment-requests");
   });
+
+  test("Should get ALL payment links created on Instamojo", async () => {
+    const allPaymentLinksExpectedResponse = { success: true, links: [] };
+    maxios.get.mockImplementationOnce(() => {
+      return Promise.resolve({ data: allPaymentLinksExpectedResponse });
+    });
+
+    maxios.get.mockImplementationOnce(() =>
+      Promise.reject(promiseRejectResponse)
+    );
+
+    const response = await Instamojo.getAllPaymentLinksCreatedOnInstamojo();
+    const rejectedResponse = await Instamojo.getAllPaymentLinksCreatedOnInstamojo();
+
+    expect(response).toStrictEqual(allPaymentLinksExpectedResponse);
+    expect(rejectedResponse).toStrictEqual(promiseRejectResponse.response);
+    expect(maxios.get).toHaveBeenCalledTimes(2);
+    expect(maxios.get).toHaveBeenCalledWith("/links");
+  });
 });
