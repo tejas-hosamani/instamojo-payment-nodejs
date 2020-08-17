@@ -4,7 +4,26 @@
   "description": "Promise based Instamojo payment gateway integration for NodeJS",
   "main": "main.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest --coverage",
+    "testing": "npm run test -- --watch"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "npm test"
+    }
+  },
+  "jest": {
+    "collectCoverageFrom": [
+      "src/*.js"
+    ],
+    "coverageThreshold": {
+      "global": {
+        "branches": 30,
+        "functions": 100,
+        "lines": 75,
+        "statements": 75
+      }
+    }
   },
   "repository": {
     "type": "git",
@@ -27,5 +46,9 @@
   "license": "MIT",
   "dependencies": {
     "axios": "^0.19.2"
+  },
+  "devDependencies": {
+    "husky": "^4.2.5",
+    "jest": "^26.4.0"
   }
 }

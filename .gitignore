@@ -27,6 +27,8 @@ Temporary Items
 
 node_modules
 
-test.js
+pcTest.js
 
 .env
+
+coverage/
