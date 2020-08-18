@@ -2,7 +2,12 @@
 
 **Promise based Instamojo payment gateway integrator for NodeJS based projects**
 
-![Coverage](https://img.shields.io/badge/Coverage-75%25-brightgreen.svg)
+- No callback hell ✅
+- Clean, readable code with async-await 💖
+
+![Coverage](https://img.shields.io/badge/Code_Coverage-100%25-brightgreen.svg)
+
+> If you face any problems using this package, please create an issue on this repo OR even better, create a PR! 🙂
 
 ## Installation
 
@@ -17,6 +22,9 @@ npm i instamojo-payment-nodejs // OR yarn add instamojo-payment-nodejs
 1. [Get single payment request details](#Get-single-payment-request-details)
 1. [Get single payment details](#Get-single-payment-details)
 1. [Get all payment requests](#Get-all-payment-requests)
+1. [Initiate refund](#Initiate-refund)
+1. [Get all refund requests](#Get-all-refund-requests)
+1. [Get single refund details with `refundId`](#Get-single-refund-details-with-refundId)
 
 ### **Setup keys**
 
@@ -235,33 +243,114 @@ const response = await Instamojo.getAllPaymentRequests();
 <details><summary>Response from <b>getAllPaymentRequests</b></summary>
 
 ```json
+{}
+```
+
+</details>
+
+<br />
+
+### **Initiate refund**
+
+```js
+const refundInstance = new Instamojo.RefundRequestOptions({
+  payment_id: "MOJO0816705N15845280",
+  type: "RFD", // Refer below section
+  body: "Reason for refund",
+});
+
+refundInstance.setOptionalRefundAmount(99);
+
+const refundResponse = await Instamojo.initiateRefund(
+  refundInstance.getObject()
+);
+```
+
+**Valid values for type parameter:**
+
+- `RFD`: Duplicate/delayed payment.
+- `TNR`: Product/service no longer available.
+- `QFL`: Customer not satisfied.
+- `QNR`: Product lost/damaged.
+- `EWN`: Digital download issue.
+- `TAN`: Event was canceled/changed.
+- `PTH`: Problem not described above.
+
+For more, refer: https://docs.instamojo.com/docs/creating-a-refund,
+
+<details><summary>Response from <b>initiateRefund</b></summary>
+
+```json
 {
-  "success": true,
-  // List of payment requests
-  "payment_requests": [
+  "refund": {
+    "id": "C5c0751269",
+    "payment_id": "MOJO5a06005J21512197",
+    "status": "Refunded",
+    "type": "QFL",
+    "body": "Customer isn't satisfied with the quality",
+    "refund_amount": "2500.00",
+    "total_amount": "2500.00",
+    "created_at": "2015-12-07T11:01:37.640Z"
+  },
+  "success": true
+}
+```
+
+</details>
+
+<br />
+
+### **Get all refund requests**
+
+```js
+const response = await Instamojo.getAllRefunds();
+```
+
+<details><summary>Response from <b>getAllRefunds</b></summary>
+
+```json
+{
+  "refunds": [
     {
-      "id": PAYMENT_REQUEST_ID,
-      "phone": null,
-      "email": "",
-      "buyer_name": "",
-      "amount": "20.00",
-      "purpose": "Product name",
-      "expires_at": null,
-      "status": "Pending",
-      "send_sms": false,
-      "send_email": false,
-      "sms_status": null,
-      "email_status": null,
-      "shorturl": null,
-      "longurl": "https://test.instamojo.com/@USER/PAYMENT_REQUEST_ID",
-      "redirect_url": "",
-      "webhook": "",
-      "allow_repeated_payments": false,
-      "customer_id": null,
-      "created_at": "2020-08-16T15:46:42.970983Z",
-      "modified_at": "2020-08-16T15:46:42.971001Z"
+      "id": "C5c0751269",
+      "payment_id": "MOJO5a06005J21512197",
+      "status": "Refunded",
+      "type": "QFL",
+      "body": "Customer isn't satisfied with the quality",
+      "refund_amount": "2500.00",
+      "total_amount": "2500.00",
+      "created_at": "2015-12-07T11:01:37.640Z"
     }
-  ]
+  ],
+  "success": true
+}
+```
+
+</details>
+
+<br />
+
+### **Get single refund details with refundId**
+
+```js
+const response = await Instamojo.getRefundDetails("C5c0751272");
+```
+
+<details><summary>Response from <b>getRefundDetails</b></summary>
+
+```json
+{
+  "refund": {
+    "id": "C5c0751272",
+    "payment_id": "MOJO5a06005J21512197",
+    "status": "Refunded",
+    "type": "QFL",
+    "body": "Customer isn't satisfied with the quality",
+    "refund_amount": "2500.00",
+    "total_amount": "2500.00",
+    "created_at": "2015-12-07T11:04:09.500Z"
+  },
+  "success": true
 }
 ```
 
@@ -277,16 +366,20 @@ const response = await Instamojo.getAllPaymentRequests();
 
    1. ✅ Implement Sandbox mode for developers
    1. ✅ Create a payment request
-   1. 📈 Write easy-to-follow docs for package consumers
+   1. ✅ Write an easy-to-follow docs for package consumers
    1. ✅ Get Single payment request details
    1. ✅ Get Single payment details
    1. ✅ Get all payment requests
-   1. Get all payments
-   1. Initiate refund
-   1. Get refund details
-   1. Get all refunds
+   1. ✅ Get all payments
+
+1. Refund
+
+   1. ✅ Initiate refund
+   1. ✅ Get all refund requests
+   1. ✅ Get single refund details with refundId
 
 1. ✅ Reach code test coverage threshold 60%
+1. ✅ Reach code test coverage threshold 100%
 
 ## Far
 

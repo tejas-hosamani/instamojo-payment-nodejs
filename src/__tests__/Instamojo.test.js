@@ -361,3 +361,141 @@ describe("should get payment details", () => {
     expect(maxios.get).toHaveBeenCalledWith("/links");
   });
 });
+
+describe("Refund API tests", () => {
+  test("Create refund options object", () => {
+    const refundObject = new Instamojo.RefundRequestOptions({
+      payment_id: "MOJO0816705N15845280",
+      type: "RFD",
+      body: "Reason for refund",
+    });
+
+    expect(refundObject).toEqual({
+      payment_id: "MOJO0816705N15845280",
+      type: "RFD",
+      body: "Reason for refund",
+    });
+
+    expect(refundObject.getObject()).toEqual({
+      payment_id: "MOJO0816705N15845280",
+      type: "RFD",
+      body: "Reason for refund",
+    });
+
+    refundObject.setOptionalRefundAmount(99);
+    expect(refundObject.getObject()).toEqual({
+      payment_id: "MOJO0816705N15845280",
+      refund_amount: 99,
+      type: "RFD",
+      body: "Reason for refund",
+    });
+  });
+
+  const expectedrefundResponse = {
+    refund: {
+      id: "C5c0751269",
+      payment_id: "MOJO5a06005J21512197",
+      status: "Refunded",
+      type: "QFL",
+      body: "Customer isn't satisfied with the quality",
+      refund_amount: "2500.00",
+      total_amount: "2500.00",
+      created_at: "2015-12-07T11:01:37.640Z",
+    },
+    success: true,
+  };
+
+  test("Initiate refund request with refund options object", async () => {
+    maxios.post.mockImplementationOnce(() =>
+      Promise.resolve({ data: expectedrefundResponse })
+    );
+    maxios.post.mockImplementationOnce(() =>
+      Promise.reject(promiseRejectResponse)
+    );
+
+    const refundObject = new Instamojo.RefundRequestOptions({
+      payment_id: "MOJO0816705N15845280",
+      type: "RFD",
+      body: "Reason for refund",
+    });
+
+    const refundResponse = await Instamojo.initiateRefund(refundObject);
+    const rejectedResponse = await Instamojo.initiateRefund(refundObject);
+
+    expect(refundResponse).toStrictEqual(expectedrefundResponse);
+    expect(rejectedResponse).toStrictEqual(promiseRejectResponse.response);
+    expect(maxios.post).toHaveBeenCalledTimes(2);
+    expect(maxios.post).toHaveBeenCalledWith("/refunds", {
+      body: "Reason for refund",
+      payment_id: "MOJO0816705N15845280",
+      type: "RFD",
+    });
+  });
+  const allRefundExpectedrefundResponse = {
+    refunds: [
+      {
+        id: "C5c0751269",
+        payment_id: "MOJO5a06005J21512197",
+        status: "Refunded",
+        type: "QFL",
+        body: "Customer isn't satisfied with the quality",
+        refund_amount: "2500.00",
+        total_amount: "2500.00",
+        created_at: "2015-12-07T11:01:37.640Z",
+      },
+    ],
+    success: true,
+  };
+  test("Get all refund requests", async () => {
+    maxios.get.mockImplementationOnce(() =>
+      Promise.resolve({ data: allRefundExpectedrefundResponse })
+    );
+    maxios.get.mockImplementationOnce(() =>
+      Promise.reject(promiseRejectResponse)
+    );
+
+    const allRefundResponse = await Instamojo.getAllRefunds();
+    const allRefundRejectedResponse = await Instamojo.getAllRefunds();
+
+    expect(allRefundResponse).toStrictEqual(allRefundResponse);
+    expect(allRefundRejectedResponse).toStrictEqual(
+      promiseRejectResponse.response
+    );
+    expect(maxios.get).toHaveBeenCalledTimes(2);
+    expect(maxios.get).toHaveBeenCalledWith("/refunds");
+  });
+
+  const singleRefundResponse = {
+    refund: {
+      id: "C5c0751272",
+      payment_id: "MOJO5a06005J21512197",
+      status: "Refunded",
+      type: "QFL",
+      body: "Customer isn't satisfied with the quality",
+      refund_amount: "2500.00",
+      total_amount: "2500.00",
+      created_at: "2015-12-07T11:04:09.500Z",
+    },
+    success: true,
+  };
+  test("Get single refund details with refundId", async () => {
+    maxios.get.mockImplementationOnce(() =>
+      Promise.resolve({ data: singleRefundResponse })
+    );
+    maxios.get.mockImplementationOnce(() =>
+      Promise.reject(promiseRejectResponse)
+    );
+
+    const allRefundResponse = await Instamojo.getRefundDetails("C5c0751272");
+    const allRefundRejectedResponse = await Instamojo.getRefundDetails(
+      "C5c0751272"
+    );
+
+    expect(allRefundResponse).toStrictEqual(allRefundResponse);
+    expect(allRefundRejectedResponse).toStrictEqual(
+      promiseRejectResponse.response
+    );
+    expect(maxios.get).toHaveBeenCalledTimes(2);
+    expect(maxios.get).toHaveBeenCalledWith("/refunds/C5c0751272");
+  });
+});
