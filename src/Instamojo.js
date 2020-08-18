@@ -104,6 +104,44 @@ const getAllPaymentLinksCreatedOnInstamojo = async () => {
   }
 };
 
+const RefundRequest = function ({ payment_id, type, body }) {
+  return {
+    payment_id,
+    type, // Available : ['RFD', 'TNR', 'QFL', 'QNR', 'EWN', 'TAN', 'PTH']
+    body,
+    setOptionalRefundAmount: function (refundAmount) {
+      this.refund_amount = refundAmount;
+    },
+  };
+};
+
+const initiateRefund = async (refundRequest) => {
+  try {
+    const response = await axios.post(ENDPOINT.refunds, refundRequest);
+    return response.data;
+  } catch (error) {
+    return error.response;
+  }
+};
+
+const getAllRefunds = async () => {
+  try {
+    const response = await axios.get(ENDPOINT.refunds);
+    return response.data;
+  } catch (error) {
+    return error.response;
+  }
+};
+
+const getRefundDetails = async (id) => {
+  try {
+    const response = await axios.get(`${ENDPOINT.refunds}/${id}`);
+    return response.data;
+  } catch (error) {
+    return error.response;
+  }
+};
+
 module.exports = {
   isSandboxMode,
   setKeys,
@@ -113,4 +151,8 @@ module.exports = {
   getOnePayedPaymentDetails,
   getAllPaymentRequests,
   getAllPaymentLinksCreatedOnInstamojo,
+  RefundRequest,
+  initiateRefund,
+  getAllRefunds,
+  getRefundDetails,
 };
