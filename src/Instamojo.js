@@ -104,16 +104,25 @@ const getAllPaymentLinksCreatedOnInstamojo = async () => {
   }
 };
 
-const RefundRequest = function ({ payment_id, type, body }) {
-  return {
-    payment_id,
-    type, // Available : ['RFD', 'TNR', 'QFL', 'QNR', 'EWN', 'TAN', 'PTH']
-    body,
-    setOptionalRefundAmount: function (refundAmount) {
-      this.refund_amount = refundAmount;
-    },
-  };
-};
+class RefundRequestOptions {
+  constructor({ payment_id, type, body }) {
+    this.payment_id = payment_id;
+    this.type = type;
+    this.body = body;
+  }
+  setOptionalRefundAmount(refundAmount) {
+    this.refund_amount = refundAmount;
+  }
+
+  getObject() {
+    return {
+      payment_id: this.payment_id,
+      type: this.type,
+      body: this.body,
+      refund_amount: this.refund_amount,
+    };
+  }
+}
 
 const initiateRefund = async (refundRequest) => {
   try {
@@ -133,9 +142,9 @@ const getAllRefunds = async () => {
   }
 };
 
-const getRefundDetails = async (id) => {
+const getRefundDetails = async (refundId) => {
   try {
-    const response = await axios.get(`${ENDPOINT.refunds}/${id}`);
+    const response = await axios.get(`${ENDPOINT.refunds}/${refundId}`);
     return response.data;
   } catch (error) {
     return error.response;
@@ -151,7 +160,7 @@ module.exports = {
   getOnePayedPaymentDetails,
   getAllPaymentRequests,
   getAllPaymentLinksCreatedOnInstamojo,
-  RefundRequest,
+  RefundRequestOptions,
   initiateRefund,
   getAllRefunds,
   getRefundDetails,
