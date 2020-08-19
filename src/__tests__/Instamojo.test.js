@@ -126,7 +126,7 @@ describe("Create payment request", () => {
     expect(response).toStrictEqual(responseObject.data);
     expect(rejectedResponse).toStrictEqual(promiseRejectResponse.response);
     expect(maxios.post).toHaveBeenCalledTimes(2);
-    expect(maxios.post).toHaveBeenCalledWith("/payment-requests", {
+    expect(maxios.post).toHaveBeenCalledWith("/payment-requests/", {
       allow_repeated_payments: false,
       amount: 20,
       buyer_name: "",

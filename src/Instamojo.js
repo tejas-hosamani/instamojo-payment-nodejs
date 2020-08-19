@@ -8,7 +8,7 @@ const ENVIRENMENT = {
 axios.defaults.baseURL = ENVIRENMENT["production"];
 
 const ENDPOINT = {
-  createPayment: "/payment-requests",
+  createPayment: "/payment-requests/",
   paymentStatus: "/payment-requests",
   requestLinks: "/links",
   refunds: "/refunds",
